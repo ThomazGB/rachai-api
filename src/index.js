@@ -5,9 +5,9 @@ const app = express();
 const port = process.env.PORT || 8081;
 
 const usuarioController = require('./controllers/UsuarioController');
+const viagemController = require('./controllers/ViagemController');
 /*
 const authController = require('./controllers/AuthController');
-const viagemController = require('./controllers/ViagemController');
 */
 
 app.use(bodyParser.json());
@@ -15,14 +15,11 @@ app.use(cors());
 
 
 app.use('/usuarios', usuarioController);
+app.use('/viagens', viagemController);
 
 /*
 app.use('/', (req, res) => {});
-app.use('/login', authController);
-app.use('/cadastro_motorista', motoristaController);
-app.use('/viagem', viagemController);
-app.use('/avaliacao', avaliacaoController);
-app.use('/pagamento', pagamentoController);
+app.use('/auth', authController);
 */
 
 app.use((error, req, res, next) => {
