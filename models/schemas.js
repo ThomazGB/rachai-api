@@ -11,79 +11,60 @@ const AuthSchema = new Schema({
         type: String,
         required: true
     },
-    tipo: {
-        type: Enumerator('motorista', 'usuario'),
-        required: true
-    },
     token: {
         type: String,
         required: true
     }
 }, { collection: 'Auth' });
 
-const MotoristaSchema = new Schema({
-    nome: {
-        type: String,
-        required: true
-    },
-    ra: {
-        type: Number,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    curso: {
-        type: String,
-        required: true
-    },
-    veiculos: [{
-        modelo: {
-            type: String,
-            required: true
-        },
-        cor: {
-            type: String,
-            required: true
-        },
-        placa: {
-            type: String,
-            required: true
-        }
-    }]
-}, { collection: 'Motorista' });
-
 const UsuarioSchema = new Schema({
     nome: {
         type: String,
         required: true
     },
-    ra: {
-        type: Number,
+    img_url: {
+        type: String,
         required: true
     },
     email: {
         type: String,
         required: true
     },
+    ra: {
+        type: Number,
+        required: true
+    },
     curso: {
         type: String,
         required: true
-    }
+    },
+    score: {
+        type: Number,
+        required: false
+    },
+    tipo_usuario: {
+        type: Enumerator('MOTORISTA', 'PASSAGEIRO'),
+        required: true
+    },
+    veiculos: [{
+        modelo: {
+            type: String,
+            required: false
+        },
+        cor: {
+            type: String,
+            required: false
+        },
+        placa: {
+            type: String,
+            required: false
+        }
+    }]
 }, { collection: 'Usuario' });
 
 const ViagemSchema = new Schema({
-    usuario_nome: {
-        type: String,
-        required: true
-    },
-    motorista_nome: {
-        type: String,
-        required: true
-    },
     status: {
-        type: Enumerator('pendente', 'confirmada', 'cancelada'),
+        type: Enumerator('PENDENTE', 'EM_ANDAMENTO', 'CONCLUIDA', 'CANCELADA'),
         required: true
     },
     local_partida: {
@@ -97,51 +78,50 @@ const ViagemSchema = new Schema({
     data: {
         type: Date,
         required: true
-    }
+    },
+    usuarios: [{
+        nome: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        },
+        tipo_usuario: {
+            type: Enumerator('MOTORISTA', 'PASSAGEIRO'),
+            required: true
+        }
+    }],
+    pagamento: [{
+        metodo: {
+            type: Enumerator('NULL', 'PIX', 'CARTAO_CREDITO'),
+            required: true
+        },
+        valor: {
+            type: Number,
+            required: true
+        },
+    }],
+    avaliacao: [{
+        nota: {
+            type: Number,
+            required: true
+        },
+        feedback: {
+            type: Text,
+            required: true
+        }
+    }],
 }, { collection: 'Viagem' });
 
-const AvaliacaoSchema = new Schema({
-    viagem_id: {
-        type: String,
-        required: true
-    },
-    avaliacao: {
-        type: Number,
-        required: true
-    },
-    feedback: {
-        type: Text,
-        required: true
-    }
-}, { collection: 'Avaliacao' });
-
-const PagamentoSchema = new Schema({
-    viagem_id: {
-        type: String,
-        required: true
-    },
-    metodo: {
-        type: String,
-        required: true
-    },
-    quantia: {
-        type: Number,
-        required: true
-    }
-}, { collection: 'Pagamento' });
 
 const Auth = mongoose.model('Auth', AuthSchema);
-const Motorista = mongoose.model('Motorista', MotoristaSchema);
 const Usuario = mongoose.model('Usuario', UsuarioSchema);
 const Viagem = mongoose.model('Viagem', ViagemSchema);
-const Avaliacao = mongoose.model('Avaliacao', AvaliacaoSchema);
-const Pagamento = mongoose.model('Pagamento', PagamentoSchema);
 
 module.exports = {
     Auth,
-    Motorista,
     Usuario,
-    Viagem,
-    Avaliacao,
-    Pagamento
+    Viagem
 }
