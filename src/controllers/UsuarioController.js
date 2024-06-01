@@ -38,6 +38,20 @@ router.get('/usuario/:id', async (req, res) => {
     }
 });
 
+//find by email
+router.get('/usuario/:email', async (req, res) => {
+    try {
+        const usuario = await Usuario.findOne({ email: req.params.email });
+        res.status(200).json(usuario);
+    } catch (erro) {
+        if (erro instanceof TypeError) {
+            res.status(404).json({ erro: 'Usuário não encontrado!' });
+        } else {
+            res.status(500).json({ erro: erro.message });
+        }
+    }
+});
+
 // update
 router.put('/editar_usuario/:id', async (req, res) => {
     try {

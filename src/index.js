@@ -2,25 +2,22 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+require('dotenv').config();
 const port = process.env.PORT || 8081;
 
+const authController = require('./controllers/AuthController');
 const usuarioController = require('./controllers/UsuarioController');
 const viagemController = require('./controllers/ViagemController');
 /*
-const authController = require('./controllers/AuthController');
+
 */
 
 app.use(bodyParser.json());
 app.use(cors());
 
-
+app.use('/login', authController);
 app.use('/usuarios', usuarioController);
 app.use('/viagens', viagemController);
-
-/*
-app.use('/', (req, res) => {});
-app.use('/auth', authController);
-*/
 
 app.use((error, req, res, next) => {
     console.error(error.stack);
