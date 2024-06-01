@@ -1,8 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const port = process.env.PORT;
 const JWT = process.env.JWT_SECRET_KEY;
-const TOKEN = process.env.TOKEN_HEADER_KEY;
 
 require('dotenv').config({ path: '../.env' });
 
@@ -32,9 +30,21 @@ async function login(email, senha) {
     return token;
 }
 
+async function alterarSenha(email, senha_atual, nova_senha) {
+    const auth = await Auth.findOne({ email });
+    if (!auth) {
+        throw new Error('Usuário não encontrado!');
+    }
+    if (!await bcrypt.compare(senha_atual, auth.senha)) {
+        throw new Error('Senha atual incorreta!');
+    }
+    const hash = await bcrypt.hash(nova_senha, 10);
+    await Auth.findByIdAndUpdate(auth._id, { senha: hash });
+}
+
 async function logout(email) {
     await Auth.findOne({ email });
     await Auth.findOneAndUpdate({ email }, { token: '' });
 }
 
-module.exports = { registro, login, logout };
+module.exports = { registro, login, alterarSenha, logout };
