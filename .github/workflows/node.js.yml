@@ -30,3 +30,5 @@ jobs:
     - run: npm install
     - run: npm install -g nodemon
     - run: npx nodemon index.js
+    - env:
+        port: ${{ secrets.PORT }}
