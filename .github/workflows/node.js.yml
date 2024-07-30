@@ -26,9 +26,13 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cd src
-    - run: npm install
-    - run: npm install -g nodemon
-    - run: npx nodemon index.js
-    - env:
+        
+    - name: build
+      env:
         port: ${{ secrets.PORT }}
+      run: | 
+        cd src
+        npm install
+        npm install -g nodemon
+        npx nodemon index.js
+
