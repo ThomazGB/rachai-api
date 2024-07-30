@@ -28,4 +28,5 @@ jobs:
         cache: 'npm'
     - run: cd src
     - run: npm install
+    - run: npm install -g nodemon
     - run: npx nodemon index.js
