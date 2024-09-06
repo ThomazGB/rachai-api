@@ -1,11 +1,6 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -16,22 +11,27 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 21.x]
+        node-version: [18.x, 20.x]
 
     steps:
     - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+
+    - name: Set up Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        
-    - name: build
-      env:
-        port: ${{ secrets.PORT }}
-      run: | 
-        cd src
-        npm install
-        npm install -g nodemon
-        npx nodemon index.js
 
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Build and run Docker Compose
+      run: |
+        docker-compose up --build -d
+
+    - name: Stop Docker Compose
+      if: always()
+      run: |
+        docker-compose down
