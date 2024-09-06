@@ -1,0 +1,349 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API para gerenciamento de viagens",
+    "version": "1.0.0",
+    "title": "API de Viagens"
+  },
+  "host": "localhost:8081",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/nova_viagem": {
+      "post": {
+        "tags": [
+          "Viagem"
+        ],
+        "summary": "Cria uma nova viagem",
+        "description": "Cria uma nova viagem",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados da viagem para criação",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "local_partida": {
+                  "type": "string"
+                },
+                "destino": {
+                  "type": "string"
+                },
+                "usuarios": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pagamento": {
+                  "type": "string"
+                },
+                "avaliacao": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Viagem criada com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao criar viagem",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "Viagem"
+        ],
+        "summary": "Lista todas as viagens",
+        "description": "Lista todas as viagens",
+        "responses": {
+          "200": {
+            "description": "Lista de viagens",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string"
+                  },
+                  "local_partida": {
+                    "type": "string"
+                  },
+                  "destino": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "usuarios": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "pagamento": {
+                    "type": "string"
+                  },
+                  "avaliacao": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao listar viagens",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/viagem/{id}": {
+      "get": {
+        "tags": [
+          "Viagem"
+        ],
+        "summary": "Obtém uma viagem pelo ID",
+        "description": "Obtém uma viagem pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da viagem",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Viagem encontrada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "local_partida": {
+                  "type": "string"
+                },
+                "destino": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "usuarios": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pagamento": {
+                  "type": "string"
+                },
+                "avaliacao": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Viagem não encontrada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao obter viagem",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Viagem"
+        ],
+        "summary": "Edita uma viagem pelo ID",
+        "description": "Edita uma viagem pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da viagem",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados da viagem para edição",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "local_partida": {
+                  "type": "string"
+                },
+                "destino": {
+                  "type": "string"
+                },
+                "usuarios": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pagamento": {
+                  "type": "string"
+                },
+                "avaliacao": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Viagem atualizada com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Viagem não encontrada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao atualizar viagem",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Viagem"
+        ],
+        "summary": "Deleta uma viagem pelo ID",
+        "description": "Deleta uma viagem pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da viagem",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Viagem deletada com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Viagem não encontrada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao deletar viagem",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
