@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+      MONGO_INITDB_DATABASE: Rachai
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rachai-backend
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: mongodb://admin:adminpassword@mongodb:27017/Rachai?authSource=admin
+
+volumes:
+  mongo-data:

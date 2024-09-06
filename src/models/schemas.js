@@ -119,7 +119,6 @@ const ViagemSchema = new Schema({
     }],
 }, { collection: 'Viagem' });
 
-
 const Auth = mongoose.model('Auth', AuthSchema);
 const Usuario = mongoose.model('Usuario', UsuarioSchema);
 const Viagem = mongoose.model('Viagem', ViagemSchema);
