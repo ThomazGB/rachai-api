@@ -6,12 +6,12 @@
     "title": "API de Viagens"
   },
   "host": "localhost:8081",
-  "basePath": "/api",
+  "basePath": "/",
   "schemes": [
     "http"
   ],
   "paths": {
-    "/nova_viagem": {
+    "/viagens/nova_viagem": {
       "post": {
         "tags": [
           "Viagem"
@@ -136,7 +136,7 @@
         }
       }
     },
-    "/viagem/{id}": {
+    "/viagens/viagem/{id}": {
       "get": {
         "tags": [
           "Viagem"
@@ -210,134 +210,138 @@
           }
         }
       },
-      "put": {
-        "tags": [
-          "Viagem"
-        ],
-        "summary": "Edita uma viagem pelo ID",
-        "description": "Edita uma viagem pelo ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID da viagem",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Dados da viagem para edição",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string"
-                },
-                "local_partida": {
-                  "type": "string"
-                },
-                "destino": {
-                  "type": "string"
-                },
-                "usuarios": {
-                  "type": "array",
-                  "items": {
+      "/viagens/editar_viagem/{id}": {
+        "put": {
+          "tags": [
+            "Viagem"
+          ],
+          "summary": "Edita uma viagem pelo ID",
+          "description": "Edita uma viagem pelo ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID da viagem",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Dados da viagem para edição",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string"
+                  },
+                  "local_partida": {
+                    "type": "string"
+                  },
+                  "destino": {
+                    "type": "string"
+                  },
+                  "usuarios": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "pagamento": {
+                    "type": "string"
+                  },
+                  "avaliacao": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Viagem atualizada com sucesso",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
                     "type": "string"
                   }
-                },
-                "pagamento": {
-                  "type": "string"
-                },
-                "avaliacao": {
-                  "type": "number"
                 }
               }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Viagem atualizada com sucesso",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
+            },
+            "404": {
+              "description": "Viagem não encontrada",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "erro": {
+                    "type": "string"
+                  }
                 }
               }
-            }
-          },
-          "404": {
-            "description": "Viagem não encontrada",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "erro": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro ao atualizar viagem",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "erro": {
-                  "type": "string"
+            },
+            "500": {
+              "description": "Erro ao atualizar viagem",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "erro": {
+                    "type": "string"
+                  }
                 }
               }
             }
           }
         }
       },
-      "delete": {
-        "tags": [
-          "Viagem"
-        ],
-        "summary": "Deleta uma viagem pelo ID",
-        "description": "Deleta uma viagem pelo ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID da viagem",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Viagem deletada com sucesso",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
+      "/viagens/deletar_viagem/:id": {
+        "delete": {
+          "tags": [
+            "Viagem"
+          ],
+          "summary": "Deleta uma viagem pelo ID",
+          "description": "Deleta uma viagem pelo ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID da viagem",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Viagem deletada com sucesso",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
                 }
               }
-            }
-          },
-          "404": {
-            "description": "Viagem não encontrada",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "erro": {
-                  "type": "string"
+            },
+            "404": {
+              "description": "Viagem não encontrada",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "erro": {
+                    "type": "string"
+                  }
                 }
               }
-            }
-          },
-          "500": {
-            "description": "Erro ao deletar viagem",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "erro": {
-                  "type": "string"
+            },
+            "500": {
+              "description": "Erro ao deletar viagem",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "erro": {
+                    "type": "string"
+                  }
                 }
               }
             }

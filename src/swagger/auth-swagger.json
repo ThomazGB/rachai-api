@@ -6,12 +6,12 @@
     "title": "API de Autenticação"
   },
   "host": "localhost:8081",
-  "basePath": "/api",
+  "basePath": "/",
   "schemes": [
     "http"
   ],
   "paths": {
-    "/cadastro": {
+    "/auth/cadastro": {
       "post": {
         "tags": [
           "Auth"
@@ -63,7 +63,7 @@
         }
       }
     },
-    "/auth": {
+    "/auth/login": {
       "post": {
         "tags": [
           "Auth"
@@ -118,7 +118,7 @@
         }
       }
     },
-    "/alterar_senha": {
+    "/auth/alterar_senha": {
       "post": {
         "tags": [
           "Auth"
@@ -173,7 +173,7 @@
         }
       }
     },
-    "/logout": {
+    "/auth/logout": {
       "delete": {
         "tags": [
           "Auth"
