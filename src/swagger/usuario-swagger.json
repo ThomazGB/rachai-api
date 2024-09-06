@@ -6,12 +6,12 @@
     "title": "API de Usuários"
   },
   "host": "localhost:8081",
-  "basePath": "/api",
+  "basePath": "/",
   "schemes": [
     "http"
   ],
   "paths": {
-    "/criar_usuario": {
+    "/usuarios/criar_usuario": {
       "post": {
         "tags": [
           "Usuario"
@@ -81,7 +81,7 @@
         }
       }
     },
-    "/usuario/{id}/upload": {
+    "/usuarios/usuario/{id}/upload": {
       "post": {
         "tags": [
           "Usuario"
@@ -138,7 +138,7 @@
         }
       }
     },
-    "/": {
+    "/usuarios": {
       "get": {
         "tags": [
           "Usuario"
@@ -195,7 +195,7 @@
         }
       }
     },
-    "/usuario/{id}": {
+    "/usuarios/usuario/{id}": {
       "get": {
         "tags": [
           "Usuario"
@@ -269,7 +269,7 @@
         }
       }
     },
-    "/usuario_email": {
+    "/usuarios/usuario_email": {
       "post": {
         "tags": [
           "Usuario"
@@ -350,7 +350,7 @@
         }
       }
     },
-    "/editar_usuario/{id}": {
+    "/usuarios/editar_usuario/{id}": {
       "put": {
         "tags": [
           "Usuario"
@@ -438,7 +438,7 @@
         }
       }
     },
-    "/deletar_usuario/{id}": {
+    "/usuarios/deletar_usuario/{id}": {
       "delete": {
         "tags": [
           "Usuario"

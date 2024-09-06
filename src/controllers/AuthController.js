@@ -12,7 +12,7 @@ router.post('/cadastro', async (req, res) => {
     }
 });
 
-router.post('/auth', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const { email, senha } = req.body;
         const token = await AuthService.login(email, senha);

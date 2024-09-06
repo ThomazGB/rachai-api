@@ -3,47 +3,18 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
-const fs = require('fs');
-const path = require('path');
-require('dotenv').config();
-const port = process.env.PORT || 8081;
-
+const authSwaggerDocument = require('./swagger/auth-swagger.json');
+const usuarioSwaggerDocument = require('./swagger/usuario-swagger.json');
+const viagemSwaggerDocument = require('./swagger/viagem-swagger.json');
 const authController = require('./controllers/AuthController');
 const usuarioController = require('./controllers/UsuarioController');
 const viagemController = require('./controllers/ViagemController');
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 
-// Função para carregar um arquivo Swagger JSON
-const loadSwaggerFile = (filePath) => {
-  try {
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(fileContents);
-  } catch (e) {
-    console.error(`Erro ao carregar o arquivo ${filePath}:`, e);
-    return null;
-  }
-};
-
-// Carregar os arquivos Swagger
-const authSwaggerDocument = loadSwaggerFile(path.join(__dirname, 'swagger', 'auth-swagger.json'));
-const usuarioSwaggerDocument = loadSwaggerFile(path.join(__dirname, 'swagger', 'usuario-swagger.json'));
-const viagemSwaggerDocument = loadSwaggerFile(path.join(__dirname, 'swagger', 'viagem-swagger.json'));
-
-// Adicionar basePath aos documentos Swagger se não estiver presente
-const addBasePath = (document, basePath) => {
-  if (!document.basePath) {
-    document.basePath = basePath;
-  }
-  return document;
-};
-
-addBasePath(authSwaggerDocument, '/api/auth');
-addBasePath(usuarioSwaggerDocument, '/api/usuario');
-addBasePath(viagemSwaggerDocument, '/api/viagem');
-
-// Função para mesclar os documentos Swagger manualmente
 const mergeSwaggerDocuments = (baseDoc, ...docs) => {
   docs.forEach(doc => {
     Object.keys(doc.paths).forEach(path => {
@@ -56,7 +27,6 @@ const mergeSwaggerDocuments = (baseDoc, ...docs) => {
   return baseDoc;
 };
 
-// Documento base Swagger
 const baseSwaggerDocument = {
   swagger: '2.0',
   info: {
@@ -65,19 +35,17 @@ const baseSwaggerDocument = {
     version: '1.0.0'
   },
   host: 'localhost:8081',
-  basePath: '/api',
+  basePath: '/',
   schemes: ['http'],
   paths: {},
   definitions: {}
 };
 
-// Mesclar os documentos Swagger
 const mergedSwaggerDocument = mergeSwaggerDocuments(baseSwaggerDocument, authSwaggerDocument, usuarioSwaggerDocument, viagemSwaggerDocument);
 
-// Configurar o Swagger UI para o documento mesclado
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(mergedSwaggerDocument));
 
-app.use('/login', authController);
+app.use('/auth', authController);
 app.use('/usuarios', usuarioController);
 app.use('/viagens', viagemController);
 
@@ -86,4 +54,5 @@ app.use((error, req, res, next) => {
     res.status(500).send('Erro ao exibir a página: ' + error);
 });
 
+const port = process.env.PORT || 8081;
 app.listen(port, () => console.log(`Servidor online. Acesse http://localhost:${port}/`));
