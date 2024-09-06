@@ -1,0 +1,226 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API para gerenciamento de autenticação",
+    "version": "1.0.0",
+    "title": "API de Autenticação"
+  },
+  "host": "localhost:8081",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/cadastro": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Cadastra um novo login",
+        "description": "Cadastra um novo login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do usuário para cadastro",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "senha": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Login criado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao criar login",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Realiza login",
+        "description": "Realiza login do usuário",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do usuário para login",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "senha": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao realizar login",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alterar_senha": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Altera a senha do usuário",
+        "description": "Altera a senha do usuário",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados para alteração de senha",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "senha_atual": {
+                  "type": "string"
+                },
+                "nova_senha": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Senha alterada com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao alterar senha",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "delete": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Realiza logout",
+        "description": "Realiza logout do usuário",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do usuário para logout",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout realizado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao realizar logout",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

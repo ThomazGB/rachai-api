@@ -1,0 +1,495 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API para gerenciamento de usuários",
+    "version": "1.0.0",
+    "title": "API de Usuários"
+  },
+  "host": "localhost:8081",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/criar_usuario": {
+      "post": {
+        "tags": [
+          "Usuario"
+        ],
+        "summary": "Cadastra um novo usuário",
+        "description": "Cadastra um novo usuário",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do usuário para cadastro",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "ra": {
+                  "type": "string"
+                },
+                "curso": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "tipo_usuario": {
+                  "type": "string"
+                },
+                "veiculos": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário cadastrado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao cadastrar usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuario/{id}/upload": {
+      "post": {
+        "tags": [
+          "Usuario"
+        ],
+        "summary": "Faz upload de imagem do usuário",
+        "description": "Faz upload de imagem do usuário",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados para upload de imagem",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Imagem enviada com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "img_url": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao enviar imagem",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "Usuario"
+        ],
+        "summary": "Lista todos os usuários",
+        "description": "Lista todos os usuários",
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "ra": {
+                    "type": "string"
+                  },
+                  "curso": {
+                    "type": "string"
+                  },
+                  "score": {
+                    "type": "number"
+                  },
+                  "tipo_usuario": {
+                    "type": "string"
+                  },
+                  "veiculos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao listar usuários",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuario/{id}": {
+      "get": {
+        "tags": [
+          "Usuario"
+        ],
+        "summary": "Obtém um usuário pelo ID",
+        "description": "Obtém um usuário pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "ra": {
+                  "type": "string"
+                },
+                "curso": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "tipo_usuario": {
+                  "type": "string"
+                },
+                "veiculos": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao obter usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuario_email": {
+      "post": {
+        "tags": [
+          "Usuario"
+        ],
+        "summary": "Obtém um usuário pelo email",
+        "description": "Obtém um usuário pelo email",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Email do usuário",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "ra": {
+                  "type": "string"
+                },
+                "curso": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "tipo_usuario": {
+                  "type": "string"
+                },
+                "veiculos": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao obter usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/editar_usuario/{id}": {
+      "put": {
+        "tags": [
+          "Usuario"
+        ],
+        "summary": "Edita um usuário pelo ID",
+        "description": "Edita um usuário pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do usuário para edição",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "ra": {
+                  "type": "string"
+                },
+                "curso": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "tipo_usuario": {
+                  "type": "string"
+                },
+                "veiculos": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao atualizar usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deletar_usuario/{id}": {
+      "delete": {
+        "tags": [
+          "Usuario"
+        ],
+        "summary": "Deleta um usuário pelo ID",
+        "description": "Deleta um usuário pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário deletado com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao deletar usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
