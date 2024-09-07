@@ -22,8 +22,12 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: rachai-backend
+    volumes:
+      - ./manifests:/etc/puppetlabs/code/environments/production/manifests
+      - ./modules:/etc/puppetlabs/code/environments/production/modules
     ports:
       - "8081:8081"
+    entrypoint: ["tail", "-f", "/dev/null"]
     depends_on:
       - mongodb
     environment:
