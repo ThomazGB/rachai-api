@@ -1,20 +1,23 @@
-# Use a imagem base oficial do Node.js
 FROM node:20
 
-# Defina o diretório de trabalho no contêiner
 WORKDIR /app
 
-# Copie o package.json e o package-lock.json para o diretório de trabalho
 COPY ["package.json", "package-lock.json", "./"]
 
-# Copie o restante do código da aplicação para o diretório de trabalho
 COPY . .
 
-# Instale as dependências do projeto
 RUN npm install
 
-# Exponha a porta que a aplicação irá rodar
+RUN apt-get update && \
+    apt-get install -y wget lsb-release && \
+    wget https://apt.puppetlabs.com/puppet6-release-focal.deb && \
+    dpkg -i puppet6-release-focal.deb && \
+    apt-get update && \
+    apt-get install -y puppet-agent && \
+    rm puppet6-release-focal.deb
+
+ENV PATH="/opt/puppetlabs/bin:${PATH}"
+
 EXPOSE 8081
 
-# Comando para iniciar a aplicação
 CMD ["npx", "nodemon", "src/index.js"]
