@@ -6,7 +6,17 @@ require('dotenv').config({ path: '../.env' });
 
 const Auth = require('../models/schemas').Auth;
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 async function registro(email, senha) {
+    if (!emailRegex.test(email)) {
+        throw new Error('Formato de email inválido!');
+    }
+    if (!senhaRegex.test(senha)) {
+        throw new Error('A senha deve conter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um caractere especial e um número.');
+    }
+
     const auth = await Auth.findOne({ email });
     if (auth) {
         throw new Error('Usuário já cadastrado!');
@@ -31,6 +41,13 @@ async function login(email, senha) {
 }
 
 async function alterarSenha(email, senha_atual, nova_senha) {
+    if (!emailRegex.test(email)) {
+        throw new Error('Formato de email inválido!');
+    }
+    if (!senhaRegex.test(nova_senha)) {
+        throw new Error('A nova senha deve conter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um caractere especial e um número.');
+    }
+
     const auth = await Auth.findOne({ email });
     if (!auth) {
         throw new Error('Usuário não encontrado!');
