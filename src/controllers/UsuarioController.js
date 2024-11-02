@@ -61,7 +61,7 @@ router.post('/usuario_email', async (req, res) => {
 router.put('/editar_usuario/:id', async (req, res) => {
     try {
         const { nome, email, ra, curso, score, tipo_usuario, veiculos } = req.body;
-        await Usuario.findByIdAndUpdate(req.params.id, { nome, email, ra, curso, score, tipo_usuario, veiculos });
+        await Usuario.findByIdAndUpdate(req.params.id, { nome, email, ra, curso, score, tipo_usuario, veiculos }, { new: true });
         res.status(200).json({ message: 'Usuário atualizado com sucesso!' });
     } catch (erro) {
         if (erro instanceof TypeError) {
