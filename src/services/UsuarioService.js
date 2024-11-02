@@ -1,13 +1,11 @@
 const multer = require('multer');
 const path = require('path');
-const port = process.env.PORT;
 const Usuario = require('../models/schemas').Usuario;
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         const dir = path.join(__dirname, '../upload/fotos_perfil');
         cb(null, dir);
-        console.log(dir);
     },
     filename: function(req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -27,12 +25,20 @@ async function uploadImagem(req, res) {
         });
     });
 
-    const dir = await uploadPromise;
-    const usuario = await Usuario.findById(req.params.id);
-    usuario.img_url = dir;
-    await usuario.save();
-
-    return dir;
+    try {
+        const filePath = await uploadPromise;
+        const usuario = await Usuario.findById(req.params.id);
+        if (!usuario) {
+            return res.status(404).send({ message: 'Usuário não encontrado' });
+        }
+        usuario.fotoPerfil = filePath;
+        await usuario.save();
+        res.status(200).send({ message: 'Imagem enviada com sucesso!' });
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
 }
 
-module.exports = { uploadImagem };
+module.exports = {
+    uploadImagem
+};
