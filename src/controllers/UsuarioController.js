@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const UsuarioService = require('./../services/UsuarioService');
-const usuarioSwaggerDocument = require('../swagger/usuario-swagger.json');
 
 const Usuario = require('../models/schemas').Usuario;
 
@@ -62,13 +61,13 @@ router.post('/usuario_email', async (req, res) => {
 router.put('/editar_usuario/:id', async (req, res) => {
     try {
         const { nome, email, ra, curso, score, tipo_usuario, veiculos } = req.body;
-        await Usuario.findByIdAndUpdate(req.params.id, { nome, email, ra, curso, score, tipo_usuario, veiculos })
+        await Usuario.findByIdAndUpdate(req.params.id, { nome, email, ra, curso, score, tipo_usuario, veiculos });
         res.status(200).json({ message: 'Usuário atualizado com sucesso!' });
     } catch (erro) {
         if (erro instanceof TypeError) {
             res.status(404).json({ erro: 'Usuário não encontrado!' });
         } else {
-            res.status(500).json({ erro: erro.message })
+            res.status(500).json({ erro: erro.message });
         }
     }
 });
@@ -81,7 +80,7 @@ router.delete('/deletar_usuario/:id', async (req, res) => {
         if (erro instanceof TypeError) {
             res.status(404).json({ erro: 'Usuário não encontrado!' });
         } else {
-            res.status(500).json({ erro: erro.message })
+            res.status(500).json({ erro: erro.message });
         }
     }
 });
