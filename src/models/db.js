@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb://admin:adminpassword@mongodb:27017/Rachai?authSource=admin";
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://admin:adminpassword@mongodb:27017/Rachai?authSource=admin';
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,

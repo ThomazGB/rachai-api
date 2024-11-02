@@ -209,6 +209,7 @@
             }
           }
         }
+      }
       },
       "/viagens/editar_viagem/{id}": {
         "put": {
@@ -341,7 +342,6 @@
                 "properties": {
                   "erro": {
                     "type": "string"
-                  }
                 }
               }
             }

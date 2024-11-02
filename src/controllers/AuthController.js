@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const AuthService = require('./../services/AuthService');
-const authSwaggerDocument = require('../swagger/auth-swagger.json');
 
 router.post('/cadastro', async (req, res) => {
     try {
