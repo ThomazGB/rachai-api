@@ -1,4 +1,3 @@
-const db = require('./db');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -127,4 +126,4 @@ module.exports = {
     Auth,
     Usuario,
     Viagem
-}
+};

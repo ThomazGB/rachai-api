@@ -1,5 +1,3 @@
-const multer = require('multer');
-const path = require('path');
 const { uploadImagem } = require('../../services/UsuarioService');
 const Usuario = require('./../../models/schemas').Usuario;
 

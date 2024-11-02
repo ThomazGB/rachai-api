@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Viagem = require('../models/schemas').Viagem;
-const viagemSwaggerDocument = require('../swagger/viagem-swagger.json');
 
 router.post('/nova_viagem', async (req, res) => {
     try {
@@ -40,13 +39,13 @@ router.get('/viagem/:id', async (req, res) => {
 router.put('/editar_viagem/:id', async (req, res) => {
     try {
         const { status, local_partida, destino, usuarios, pagamento, avaliacao } = req.body;
-        await Viagem.findByIdAndUpdate(req.params.id, { status, local_partida, destino, usuarios, pagamento, avaliacao })
+        await Viagem.findByIdAndUpdate(req.params.id, { status, local_partida, destino, usuarios, pagamento, avaliacao });
         res.status(200).json({ message: 'Viagem atualizada com sucesso!' });
     } catch (erro) {
         if (erro instanceof TypeError) {
             res.status(404).json({ erro: 'Viagem não encontrada!' });
         } else {
-            res.status(500).json({ erro: erro.message })
+            res.status(500).json({ erro: erro.message });
         }
     }
 });
@@ -59,7 +58,7 @@ router.delete('/deletar_viagem/:id', async (req, res) => {
         if (erro instanceof TypeError) {
             res.status(404).json({ erro: 'Viagem não encontrada!' });
         } else {
-            res.status(500).json({ erro: erro.message })
+            res.status(500).json({ erro: erro.message });
         }
     }
 });
