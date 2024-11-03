@@ -41,7 +41,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: npx jest
 
   build:
     runs-on: ubuntu-latest
