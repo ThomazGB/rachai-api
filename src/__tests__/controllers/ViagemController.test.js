@@ -15,15 +15,11 @@ jest.mock('./../../models/schemas', () => ({
 describe('ViagemController', () => {
     beforeAll(async () => {
         await mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
-    });
+    }, 60000);
 
     afterAll(async () => {
         await mongoose.connection.close();
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
+    }, 60000);
 
     it('should create a new travel', async () => {
         const mockTravel = {

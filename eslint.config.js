@@ -6,7 +6,7 @@ module.exports = [
             sourceType: 'module',
         },
         rules: {
-            'no-unused-vars': 'warn',
+            'no-unused-vars': ['warn', { 'argsIgnorePattern': '^next$' }],
             'no-console': 'off',
             'semi': ['error', 'always'],
             'quotes': ['error', 'single'],
