@@ -20,11 +20,11 @@ jest.mock('./../../services/UsuarioService', () => ({
 describe('UsuarioController', () => {
     beforeAll(async () => {
         await mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
-    });
+    }, 60000);
 
     afterAll(async () => {
         await mongoose.connection.close();
-    });
+    }, 60000);
 
     afterEach(() => {
         jest.clearAllMocks();
