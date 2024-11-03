@@ -49,9 +49,9 @@ app.use('/auth', authController);
 app.use('/usuarios', usuarioController);
 app.use('/viagens', viagemController);
 
-app.use((error, req, res) => {
-    console.error(error.stack);
-    res.status(500).send('Erro ao exibir a página: ' + error);
+app.use((error, req, res, next) => {
+  console.error(error.stack);
+  res.status(500).send('Erro ao exibir a página: ' + error);
 });
 
 const port = process.env.PORT || 8081;
