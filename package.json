@@ -104,7 +104,7 @@
   "scripts": {
     "test": "npx jest",
     "start": "npx src/index.js",
-    "build": "tsc -p src",
+    "build": "tsc",
     "dev": "npx nodemon src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
