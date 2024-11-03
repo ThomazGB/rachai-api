@@ -28,6 +28,11 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -39,6 +44,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Wait for MongoDB to start
+        run: |
+          while ! nc -z localhost 27017; do
+            sleep 1
+          done
 
       - name: Run tests
         run: npx jest
