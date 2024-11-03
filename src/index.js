@@ -15,6 +15,9 @@ app.use(cors({
   origin: '*'
 }));
 
+const url = process.env.URL || 'http://localhost';
+const port = process.env.PORT || 8081;
+
 const mergeSwaggerDocuments = (baseDoc, ...docs) => {
   docs.forEach(doc => {
     Object.keys(doc.paths).forEach(path => {
@@ -34,7 +37,7 @@ const baseSwaggerDocument = {
     description: 'Cuidado! Área de Testes',
     version: '1.0.0'
   },
-  host: 'localhost:8081',
+  host: `${url}:${port}`,	
   basePath: '/',
   schemes: ['http'],
   paths: {},
@@ -54,5 +57,4 @@ app.use((error, req, res, next) => {
   res.status(500).send('Erro ao exibir a página: ' + error);
 });
 
-const port = process.env.PORT || 8081;
-app.listen(port, () => console.log(`Servidor online. Acesse http://localhost:${port}/`));
+app.listen(port, () => console.log(`Servidor online. Acesse ${url}:${port}/`));

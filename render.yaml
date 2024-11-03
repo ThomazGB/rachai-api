@@ -1,0 +1,12 @@
+#Render deployment
+
+previews:
+  generation: automatic
+
+services:
+  - type: web
+    name: rachai-backend
+    runtime: docker
+    plan: free
+    repo: https://github.com/Rachai-Fatec/backend.git
+    branch: main
