@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+require('./db');
 
 const AuthSchema = new Schema({
     email: {
@@ -35,6 +36,7 @@ const UsuarioSchema = new Schema({
     },
     curso: {
         type: String,
+        enum: ['GE', 'GPI', 'CD', 'DSM'],
         required: true
     },
     score: {
