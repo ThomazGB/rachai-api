@@ -18,6 +18,8 @@
 <img src="https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB" alt="Express.js">
 <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens" alt="JWT">
 <img src="https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white" alt="Swagger">
+<img src="https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white" alt="Eslint">
+<img src="https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white" alt="Jest">
 <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB">
 </p>
 <br>
@@ -65,16 +67,12 @@ $ git clone https://github.com/Rachai-Fatec/backend.git
 Após o clone do repositório, abra o terminal dentro da pasta do projeto e execute os comandos na ordem abaixo:
 
 ```bash
-# Entre no repositorio
-$ cd src
-```
-```bash
 # Instale as dependencias necessárias
 $ npm install
 ```
 ```bash
 # Execute a aplicacao
-$ npx nodemon index.js
+$ npx nodemon src/index.js
 ```
 ## Créditos
 

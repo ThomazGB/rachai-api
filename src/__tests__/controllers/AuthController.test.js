@@ -1,3 +1,4 @@
+require('dotenv').config();
 const request = require('supertest');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -12,7 +13,8 @@ jest.mock('./../../services/AuthService');
 
 describe('AuthController', () => {
     beforeAll(async () => {
-        await mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
+        const URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/Rachai';
+        await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });
     }, 60000);
 
     afterAll(async () => {

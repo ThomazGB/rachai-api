@@ -56,7 +56,7 @@
     "mime-types": "^2.1.35",
     "mongodb": "^6.10.0",
     "mongodb-connection-string-url": "^3.0.1",
-    "mongoose": "^8.4.1",
+    "mongoose": "^8.8.0",
     "mpath": "^0.9.0",
     "mquery": "^5.0.0",
     "ms": "^2.0.0",
@@ -106,7 +106,7 @@
   },
   "scripts": {
     "test": "npx jest",
-    "start": "npx src/index.js",
+    "start": "npx nodemon src/index.js",
     "build": "babel src --out-dir dist",
     "dev": "npx nodemon src/index.js",
     "lint": "eslint .",

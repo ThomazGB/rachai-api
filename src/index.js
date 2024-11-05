@@ -12,10 +12,12 @@ const viagemController = require('./controllers/ViagemController');
 
 app.use(bodyParser.json());
 app.use(cors({
-  origin: '*'
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-const url = process.env.URL || 'http://localhost';
+const url = process.env.URL || 'localhost';
 const port = process.env.PORT || 8081;
 
 const mergeSwaggerDocuments = (baseDoc, ...docs) => {
@@ -39,7 +41,6 @@ const baseSwaggerDocument = {
   },
   host: `${url}:${port}`,	
   basePath: '/',
-  schemes: ['http'],
   paths: {},
   definitions: {}
 };

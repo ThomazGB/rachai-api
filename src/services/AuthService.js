@@ -1,8 +1,7 @@
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT = process.env.JWT_SECRET_KEY;
-
-require('dotenv').config({ path: '../.env' });
 
 const Auth = require('../models/schemas').Auth;
 
@@ -21,10 +20,19 @@ async function registro(email, senha) {
     if (auth) {
         throw new Error('Usuário já cadastrado!');
     }
+
     const hash = await bcrypt.hash(senha, 10);
     const token = jwt.sign({ email }, JWT, { expiresIn: '1m' });
-    await new Auth({ email, senha: hash, token }).save();
-    return token;
+
+    try {
+        const newAuth = new Auth({ email, senha: hash, token });
+        await newAuth.save();
+        console.log('Usuário salvo com sucesso');
+        return token;
+    } catch (error) {
+        console.error('Erro ao salvar o usuário no banco de dados:', error);
+        throw new Error('Erro ao salvar o usuário no banco de dados');
+    }
 }
 
 async function login(email, senha) {

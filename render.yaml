@@ -5,8 +5,11 @@ previews:
 
 services:
   - type: web
-    name: rachai-backend
-    runtime: docker
+    name: rachai-backend-github
+    runtime: node
     plan: free
-    repo: https://github.com/Rachai-Fatec/backend.git
-    branch: main
+    buildCommand: 'npm install'
+    startCommand: 'npx nodemon src/index.js'
+    envVars:
+      - key: MONGO_URI
+        sync: false
