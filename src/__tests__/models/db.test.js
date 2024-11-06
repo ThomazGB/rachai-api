@@ -7,7 +7,7 @@ let mongoServer;
 
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
-    const URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/Rachai';
+    const URI = process.env.MONGO_URI_QA || 'mongodb://127.0.0.1:27017/Rachai_Teste';
 
     await mongoose.disconnect();
     await mongoose.connect(URI, {

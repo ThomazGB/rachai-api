@@ -20,7 +20,7 @@ jest.mock('./../../services/UsuarioService', () => ({
 
 describe('UsuarioController', () => {
     beforeAll(async () => {
-        const URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/Rachai';
+        const URI = process.env.MONGO_URI_QA || 'mongodb://127.0.0.1:27017/Rachai_Teste';
         await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });
     }, 60000);
 
