@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/Rachai';
+const URI = process.env.MONGO_URI_PROD || 'mongodb://127.0.0.1:27017/Rachai';
 
 mongoose.connect(URI, {
   serverSelectionTimeoutMS: 10000,
