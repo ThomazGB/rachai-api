@@ -67,7 +67,13 @@ const uploadImagem = async (req, res) => {
         await usuario.save();
         return file.location;
     } catch (error) {
-        throw error;
+        if (error.message === 'Arquivo não encontrado') {
+            res.status(400).json({ error: error.message });
+        } else if (error.message === 'Usuário não encontrado') {
+            res.status(404).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Erro interno do servidor' });
+        }
     }
 };
 
