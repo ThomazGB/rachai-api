@@ -83,35 +83,27 @@
         "tags": [
           "Usuario"
         ],
-        "summary": "Faz upload de imagem do usuário",
-        "description": "Faz upload de imagem do usuário",
+        "summary": "Faz upload de uma imagem para o usuário",
+        "description": "Faz upload de uma imagem para o usuário especificado pelo ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID do usuário",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "ID do usuário"
           },
           {
-            "name": "body",
-            "in": "body",
-            "description": "Dados para upload de imagem",
+            "name": "imagem",
+            "in": "formData",
             "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "file": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
+            "type": "file",
+            "description": "Imagem a ser carregada"
           }
         ],
         "responses": {
           "200": {
-            "description": "Imagem enviada com sucesso",
+            "description": "Imagem carregada com sucesso",
             "schema": {
               "type": "object",
               "properties": {
@@ -122,15 +114,7 @@
             }
           },
           "500": {
-            "description": "Erro ao enviar imagem",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "erro": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "Erro ao carregar a imagem"
           }
         }
       }
@@ -188,6 +172,43 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/usuarios/usuario/motoristas": {
+      "get": {
+        "tags": [
+          "Usuario"
+        ],
+        "summary": "Obtém uma lista de motoristas",
+        "description": "Retorna uma lista de usuários que são motoristas",
+        "responses": {
+          "200": {
+            "description": "Lista de motoristas",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "tipo_usuario": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Infelizmente não encontramos nenhum motorista na sua área!"
+          },
+          "500": {
+            "description": "Erro ao buscar motoristas"
           }
         }
       }

@@ -2,12 +2,21 @@ const { registro, login, alterarSenha, logout } = require('../../services/AuthSe
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Auth } = require('../../models/schemas');
+const mongoose = require('mongoose');
 
 jest.mock('bcryptjs');
 jest.mock('jsonwebtoken');
 jest.mock('../../models/schemas');
 
 describe('AuthService', () => {
+    beforeAll(async () => {
+        const uri = process.env.MONGODB_URI_QA || 'mongodb://127.0.0.1:27017/Rachai_Teste';
+        await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    });
+
+    afterAll(async () => {
+        await mongoose.connection.close();
+    });
     const email = 'test@example.com';
     const senha = 'Password@123';
     const novaSenha = 'NewPassword@123';
