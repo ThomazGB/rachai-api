@@ -1,26 +1,17 @@
-const { registro, login, alterarSenha, logout } = require('../../services/AuthService');
+const AuthService = require('../../services/AuthService');
+const AuthRepository = require('../../repositories/AuthRepository');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { Auth } = require('../../models/schemas');
-const mongoose = require('mongoose');
 
+jest.mock('../../repositories/AuthRepository');
 jest.mock('bcryptjs');
 jest.mock('jsonwebtoken');
-jest.mock('../../models/schemas');
 
 describe('AuthService', () => {
-    beforeAll(async () => {
-        const uri = process.env.MONGODB_URI_QA || 'mongodb://127.0.0.1:27017/Rachai_Teste';
-        await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    });
-
-    afterAll(async () => {
-        await mongoose.connection.close();
-    });
     const email = 'test@example.com';
-    const senha = 'Password@123';
-    const novaSenha = 'NewPassword@123';
-    const token = 'fake-jwt-token';
+    const senha = 'Password123!';
+    const hash = 'hashedPassword';
+    const token = 'jwtToken';
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -28,96 +19,94 @@ describe('AuthService', () => {
 
     describe('registro', () => {
         it('should throw an error if email format is invalid', async () => {
-            await expect(registro('invalid-email', senha)).rejects.toThrow('Formato de email inválido!');
+            await expect(AuthService.registro('invalidEmail', senha)).rejects.toThrow('Formato de email inválido!');
         });
 
         it('should throw an error if password format is invalid', async () => {
-            await expect(registro(email, 'invalid')).rejects.toThrow('A senha deve conter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um caractere especial e um número.');
+            await expect(AuthService.registro(email, 'invalid')).rejects.toThrow('A senha deve conter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um caractere especial e um número.');
         });
 
         it('should throw an error if user already exists', async () => {
-            Auth.findOne.mockResolvedValue({ email });
-            await expect(registro(email, senha)).rejects.toThrow('Usuário já cadastrado!');
+            AuthRepository.encontrarAuthPorEmail.mockResolvedValue({ email });
+            await expect(AuthService.registro(email, senha)).rejects.toThrow('Usuário já cadastrado!');
         });
 
-        it('should register a new user and return a token', async () => {
-            Auth.findOne.mockResolvedValue(null);
-            bcrypt.hash.mockResolvedValue('hashed-password');
+        it('should save user and return token', async () => {
+            AuthRepository.encontrarAuthPorEmail.mockResolvedValue(null);
+            bcrypt.hash.mockResolvedValue(hash);
             jwt.sign.mockReturnValue(token);
-            Auth.prototype.save = jest.fn().mockResolvedValue({});
+            AuthRepository.registro.mockResolvedValue();
 
-            const result = await registro(email, senha);
+            const result = await AuthService.registro(email, senha);
 
             expect(result).toBe(token);
-            expect(Auth.prototype.save).toHaveBeenCalled();
+            expect(AuthRepository.registro).toHaveBeenCalledWith({ email, senha: hash, token });
         });
     });
 
     describe('login', () => {
         it('should throw an error if user is not found', async () => {
-            Auth.findOne.mockResolvedValue(null);
-            await expect(login(email, senha)).rejects.toThrow('Usuário não encontrado!');
+            AuthRepository.login.mockResolvedValue(null);
+            await expect(AuthService.login(email, senha)).rejects.toThrow('Usuário não encontrado!');
         });
 
         it('should throw an error if password is incorrect', async () => {
-            Auth.findOne.mockResolvedValue({ email, senha: 'hashed-password' });
+            AuthRepository.login.mockResolvedValue({ email, senha: hash });
             bcrypt.compare.mockResolvedValue(false);
-            await expect(login(email, senha)).rejects.toThrow('Senha incorreta!');
+            await expect(AuthService.login(email, senha)).rejects.toThrow('Senha incorreta!');
         });
 
-        it('should return a token if login is successful', async () => {
-            Auth.findOne.mockResolvedValue({ _id: 'user-id', email, senha: 'hashed-password' });
+        it('should return token if login is successful', async () => {
+            AuthRepository.login.mockResolvedValue({ email, senha: hash, _id: 'userId' });
             bcrypt.compare.mockResolvedValue(true);
             jwt.sign.mockReturnValue(token);
-            Auth.findByIdAndUpdate.mockResolvedValue({});
 
-            const result = await login(email, senha);
+            const result = await AuthService.login(email, senha);
 
             expect(result).toBe(token);
-            expect(Auth.findByIdAndUpdate).toHaveBeenCalledWith('user-id', { token });
+            expect(AuthRepository.login).toHaveBeenCalledWith('userId', { token });
         });
     });
 
     describe('alterarSenha', () => {
         it('should throw an error if email format is invalid', async () => {
-            await expect(alterarSenha('invalid-email', senha, novaSenha)).rejects.toThrow('Formato de email inválido!');
+            await expect(AuthService.alterarSenha('invalidEmail', senha, 'NewPassword123!')).rejects.toThrow('Formato de email inválido!');
         });
 
         it('should throw an error if new password format is invalid', async () => {
-            await expect(alterarSenha(email, senha, 'invalid')).rejects.toThrow('A nova senha deve conter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um caractere especial e um número.');
+            await expect(AuthService.alterarSenha(email, senha, 'invalid')).rejects.toThrow('A nova senha deve conter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um caractere especial e um número.');
         });
 
         it('should throw an error if user is not found', async () => {
-            Auth.findOne.mockResolvedValue(null);
-            await expect(alterarSenha(email, senha, novaSenha)).rejects.toThrow('Usuário não encontrado!');
+            AuthRepository.encontrarAuthPorEmail.mockResolvedValue(null);
+            await expect(AuthService.alterarSenha(email, senha, 'NewPassword123!')).rejects.toThrow('Usuário não encontrado!');
         });
 
         it('should throw an error if current password is incorrect', async () => {
-            Auth.findOne.mockResolvedValue({ email, senha: 'hashed-password' });
+            AuthRepository.encontrarAuthPorEmail.mockResolvedValue({ email, senha: hash });
             bcrypt.compare.mockResolvedValue(false);
-            await expect(alterarSenha(email, senha, novaSenha)).rejects.toThrow('Senha atual incorreta!');
+            await expect(AuthService.alterarSenha(email, senha, 'NewPassword123!')).rejects.toThrow('Senha atual incorreta!');
         });
 
-        it('should update the password if current password is correct', async () => {
-            Auth.findOne.mockResolvedValue({ _id: 'user-id', email, senha: 'hashed-password' });
+        it('should update password if current password is correct', async () => {
+            AuthRepository.encontrarAuthPorEmail.mockResolvedValue({ email, senha: hash, _id: 'userId' });
             bcrypt.compare.mockResolvedValue(true);
-            bcrypt.hash.mockResolvedValue('new-hashed-password');
-            Auth.findByIdAndUpdate.mockResolvedValue({});
+            bcrypt.hash.mockResolvedValue('newHashedPassword');
+            AuthRepository.alterarSenha.mockResolvedValue();
 
-            await alterarSenha(email, senha, novaSenha);
+            await AuthService.alterarSenha(email, senha, 'NewPassword123!');
 
-            expect(Auth.findByIdAndUpdate).toHaveBeenCalledWith('user-id', { senha: 'new-hashed-password' });
+            expect(AuthRepository.alterarSenha).toHaveBeenCalledWith('userId', { senha: 'newHashedPassword' });
         });
     });
 
     describe('logout', () => {
-        it('should clear the token for the user', async () => {
-            Auth.findOne.mockResolvedValue({ email });
-            Auth.findOneAndUpdate.mockResolvedValue({});
+        it('should clear the token', async () => {
+            AuthRepository.logout.mockResolvedValue();
 
-            await logout(email);
+            await AuthService.logout(email);
 
-            expect(Auth.findOneAndUpdate).toHaveBeenCalledWith({ email }, { token: '' });
+            expect(AuthRepository.logout).toHaveBeenCalledWith(email, { token: '' });
         });
     });
 });

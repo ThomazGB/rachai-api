@@ -2,14 +2,10 @@ const express = require('express');
 const router = express.Router();
 const UsuarioService = require('./../services/UsuarioService');
 
-const Usuario = require('../models/schemas').Usuario;
-
 router.post('/criar_usuario', async (req, res) => {
     try {
-        const { nome, email, ra, curso, score, tipo_usuario, veiculos } = req.body;
-        const usuario = new Usuario({ nome, email, ra, curso, score, tipo_usuario, veiculos });
-        await usuario.save();
-        res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
+        const usuario = await UsuarioService.criarUsuario(req.body);
+        res.status(201).json({ message: 'Usuário cadastrado com sucesso!', usuario });
     } catch (erro) {
         res.status(500).json({ erro: 'Erro ao cadastrar usuário' });
     }
@@ -26,7 +22,7 @@ router.post('/usuario/:id/upload', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const usuarios = await Usuario.find();
+        const usuarios = await UsuarioService.encontrarTodosUsuarios();
         res.status(200).json(usuarios);
     } catch (erro) {
         res.status(500).json({ erro: erro.message });
@@ -35,7 +31,7 @@ router.get('/', async (req, res) => {
 
 router.get('/usuario/motoristas', async (req, res) => {
     try {
-        const motoristas = await Usuario.find({ tipo_usuario: 'MOTORISTA' });
+        const motoristas = await UsuarioService.encontrarMotoristas();
         if (motoristas.length === 0) {
             return res.status(404).json({ erro: 'Infelizmente não encontramos nenhum motorista na sua área!' });
         }
@@ -47,7 +43,7 @@ router.get('/usuario/motoristas', async (req, res) => {
 
 router.get('/usuario/:id', async (req, res) => {
     try {
-        const usuario = await Usuario.findById(req.params.id);
+        const usuario = await UsuarioService.encontrarUsuarioPorId(req.params.id);
         if (!usuario) {
             return res.status(404).json({ erro: 'Usuário não encontrado!' });
         }
@@ -59,19 +55,19 @@ router.get('/usuario/:id', async (req, res) => {
 
 router.post('/usuario_email', async (req, res) => {
     try {
-        const usuario = await Usuario.findOne({ email: req.body.email });
+        const usuario = await UsuarioService.encontrarUsuarioPorEmail(req.body.email);
         if (!usuario) {
             return res.status(404).json({ erro: 'Usuário não encontrado!' });
         }
         res.status(200).json(usuario);
     } catch (error) {
-        res.status(500).json({ erro: 'Error fetching user' });
+        res.status(500).json({ erro: 'Erro ao encontrar o usuário' });
     }
 });
 
 router.put('/editar_usuario/:id', async (req, res) => {
     try {
-        const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const usuario = await UsuarioService.atualizarUsuarioPorId(req.params.id, req.body);
         if (!usuario) {
             return res.status(404).json({ erro: 'Usuário não encontrado!' });
         }
@@ -83,7 +79,7 @@ router.put('/editar_usuario/:id', async (req, res) => {
 
 router.delete('/deletar_usuario/:id', async (req, res) => {
     try {
-        const usuario = await Usuario.findByIdAndDelete(req.params.id);
+        const usuario = await UsuarioService.deletarUsuarioPorId(req.params.id);
         if (!usuario) {
             return res.status(404).json({ erro: 'Usuário não encontrado!' });
         }
