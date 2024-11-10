@@ -7,7 +7,7 @@ router.post('/cadastro', async (req, res) => {
         const token = await AuthService.registro(req.body.email, req.body.senha);
         res.status(201).json({ token });
     } catch (erro) {
-        res.status(500).json({ erro: erro.message });
+        res.status(500).json({ erro: 'Erro ao registrar usuário' });
     }
 });
 
@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
         const token = await AuthService.login(email, senha);
         res.status(200).json({ token, email });
     } catch (erro) {
-        res.status(500).json({ erro: erro.message });
+        res.status(500).json({ erro: 'Erro ao realizar login' });
     }
 });
 
@@ -26,7 +26,7 @@ router.post('/alterar_senha', async (req, res) => {
         await AuthService.alterarSenha(req.body.email, req.body.senha_atual, req.body.nova_senha);
         res.status(200).json({ message: 'Senha alterada com sucesso!' });
     } catch (erro) {
-        res.status(500).json({ erro: erro.message });
+        res.status(500).json({ erro: 'Erro ao alterar senha' });
     }
 });
 
@@ -35,7 +35,7 @@ router.delete('/logout', async (req, res) => {
         await AuthService.logout(req.body.email);
         res.status(200).json({ message: 'Logout realizado com sucesso!' });
     } catch (erro) {
-        res.status(500).json({ erro: erro.message });
+        res.status(500).json({ erro: 'Erro ao realizar logout' });
     }
 });
 

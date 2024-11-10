@@ -7,6 +7,9 @@
   },
   "host": "localhost:8081",
   "basePath": "/",
+  "schemes": [
+    "https"
+  ],
   "paths": {
     "/usuarios/criar_usuario": {
       "post": {

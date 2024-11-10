@@ -1,10 +1,10 @@
+const UsuarioRepository = require('./../repositories/UsuarioRepository');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const { S3Client } = require('@aws-sdk/client-s3');
 const { fromEnv } = require('@aws-sdk/credential-provider-env');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const Usuario = require('./../models/schemas').Usuario;
 require('dotenv').config();
 
 const s3 = new S3Client({
@@ -26,9 +26,6 @@ const upload = multer({
             const fileName = `${uuidv4()}${path.extname(file.originalname)}`;
             const filePath = `imagens/${userId}/${fileName}`;
             cb(null, filePath);
-        },
-        contentDisposition: function (req, file, cb) {
-            cb(null, 'inline');
         }
     }),
     fileFilter: function (req, file, cb) {
@@ -43,6 +40,34 @@ const upload = multer({
         }
     }
 });
+
+const criarUsuario = async (usuarioData) => {
+    return await UsuarioRepository.criarUsuario(usuarioData);
+};
+
+const encontrarUsuarioPorId = async (id) => {
+    return await UsuarioRepository.encontrarUsuarioPorId(id);
+};
+
+const encontrarUsuarioPorEmail = async (email) => {
+    return await UsuarioRepository.encontrarUsuarioPorEmail(email);
+};
+
+const atualizarUsuarioPorId = async (id, usuarioData) => {
+    return await UsuarioRepository.atualizarUsuarioPorId(id, usuarioData);
+};
+
+const deletarUsuarioPorId = async (id) => {
+    return await UsuarioRepository.deletarUsuarioPorId(id);
+};
+
+const encontrarMotoristas = async () => {
+    return await UsuarioRepository.encontrarMotoristas();
+};
+
+const encontrarTodosUsuarios = async () => {
+    return await UsuarioRepository.encontrarTodosUsuarios();
+};
 
 const uploadImagem = async (req, res) => {
     try {
@@ -59,7 +84,7 @@ const uploadImagem = async (req, res) => {
             throw new Error('Arquivo não encontrado');
         }
         const { id } = req.params;
-        const usuario = await Usuario.findById(id);
+        const usuario = await UsuarioRepository.encontrarUsuarioPorId(id);
         if (!usuario) {
             throw new Error('Usuário não encontrado');
         }
@@ -67,16 +92,17 @@ const uploadImagem = async (req, res) => {
         await usuario.save();
         return file.location;
     } catch (error) {
-        if (error.message === 'Arquivo não encontrado') {
-            res.status(400).json({ error: error.message });
-        } else if (error.message === 'Usuário não encontrado') {
-            res.status(404).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: 'Erro interno do servidor' });
-        }
+        throw error;
     }
 };
 
 module.exports = {
+    criarUsuario,
+    encontrarUsuarioPorId,
+    encontrarUsuarioPorEmail,
+    atualizarUsuarioPorId,
+    deletarUsuarioPorId,
+    encontrarMotoristas,
+    encontrarTodosUsuarios,
     uploadImagem
 };

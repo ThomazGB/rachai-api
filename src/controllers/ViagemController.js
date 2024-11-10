@@ -1,65 +1,61 @@
 const express = require('express');
 const router = express.Router();
-const Viagem = require('../models/schemas').Viagem;
+const ViagemService = require('./../services/ViagemService');
 
 router.post('/nova_viagem', async (req, res) => {
     try {
         const { status, local_partida, destino, usuarios, pagamento, avaliacao } = req.body;
         const dataNow = new Date();
-        const viagem = new Viagem({ status, local_partida, destino, data: dataNow, usuarios, pagamento, avaliacao });
-        await viagem.save();
-        res.status(201).json({ message: 'Viagem criada com sucesso!' });
+        const viagem = await ViagemService.criarViagem({ status, local_partida, destino, data: dataNow, usuarios, pagamento, avaliacao });
+        res.status(201).json({ message: 'Viagem criada com sucesso!', viagem });
     } catch (erro) {
-        res.status(500).json({ erro: erro.message });
+        res.status(500).json({ erro: 'Erro ao criar a viagem' });
     }
 });
 
 router.get('/', async (req, res) => {
     try {
-        const viagens = await Viagem.find();
+        const viagens = await ViagemService.encontrarTodasViagens();
         res.status(200).json(viagens);
     } catch (erro) {
-        res.status(500).json({ erro: erro.message });
+        res.status(500).json({ erro: 'Erro ao encontrar as viagens' });
     }
 });
 
 router.get('/viagem/:id', async (req, res) => {
     try {
-        const viagem = await Viagem.findById(req.params.id);
+        const viagem = await ViagemService.encontrarViagemPorId(req.params.id);
+        if (!viagem) {
+            return res.status(404).json({ erro: 'Viagem não encontrada!' });
+        }
         res.status(200).json(viagem);
     } catch (erro) {
-        if (erro instanceof TypeError) {
-            res.status(404).json({ erro: 'Viagem não encontrada!' });
-        } else {
-            res.status(500).json({ erro: erro.message });
-        }
+        res.status(500).json({ erro: 'Erro ao encontrar a viagem' });
     }
 });
 
 router.put('/editar_viagem/:id', async (req, res) => {
     try {
         const { status, local_partida, destino, usuarios, pagamento, avaliacao } = req.body;
-        await Viagem.findByIdAndUpdate(req.params.id, { status, local_partida, destino, usuarios, pagamento, avaliacao });
-        res.status(200).json({ message: 'Viagem atualizada com sucesso!' });
-    } catch (erro) {
-        if (erro instanceof TypeError) {
-            res.status(404).json({ erro: 'Viagem não encontrada!' });
-        } else {
-            res.status(500).json({ erro: erro.message });
+        const viagem = await ViagemService.atualizarViagemPorId(req.params.id, { status, local_partida, destino, usuarios, pagamento, avaliacao });
+        if (!viagem) {
+            return res.status(404).json({ erro: 'Viagem não encontrada!' });
         }
+        res.status(200).json({ message: 'Viagem atualizada com sucesso!', viagem });
+    } catch (erro) {
+        res.status(500).json({ erro: 'Erro ao atualizar a viagem' });
     }
 });
 
 router.delete('/deletar_viagem/:id', async (req, res) => {
     try {
-        await Viagem.findByIdAndDelete(req.params.id);
+        const viagem = await ViagemService.deletarViagemPorId(req.params.id);
+        if (!viagem) {
+            return res.status(404).json({ erro: 'Viagem não encontrada!' });
+        }
         res.status(200).json({ message: 'Viagem deletada com sucesso!' });
     } catch (erro) {
-        if (erro instanceof TypeError) {
-            res.status(404).json({ erro: 'Viagem não encontrada!' });
-        } else {
-            res.status(500).json({ erro: erro.message });
-        }
+        res.status(500).json({ erro: 'Erro ao deletar a viagem' });
     }
 });
 
