@@ -5,7 +5,8 @@ const {
     encontrarViagemPorId,
     atualizarViagemPorId,
     deletarViagemPorId,
-    encontrarTodasViagens
+    encontrarTodasViagens,
+    encontrarViagensPorUsuarioId,
 } = require('./../../repositories/ViagemRepository');
 
 jest.mock('./../../models/schemas', () => ({
@@ -38,14 +39,14 @@ describe('ViagemRepository', () => {
 
     describe('criarViagem', () => {
         it('deve criar uma nova viagem', async () => {
-            const viagemData = { 
+            const viagemData = {
                 status: 'EM_ANDAMENTO',
-	            local_partida: '-23.597910548141385, -46.88896047131594',
-	            destino: '-23.5978449721046, 46.926853787987255',
-	            usuarios: [
+                local_partida: '-23.597910548141385, -46.88896047131594',
+                destino: '-23.5978449721046, 46.926853787987255',
+                usuarios: [
                     {
-			        nome: 'Teste 1',
-			        email: 'teste@teste.com.br',
+                        nome: 'Teste 1',
+                        email: 'teste@teste.com.br',
                         tipo_usuario: 'PASSAGEIRO'
                     },
                     {
@@ -65,7 +66,7 @@ describe('ViagemRepository', () => {
                         nota: 0,
                         feedback: 'Teste teste teste teste.'
                     }
-	            ] 
+                ]
             };
             Viagem.create.mockResolvedValue(viagemData);
 
@@ -122,6 +123,22 @@ describe('ViagemRepository', () => {
             const result = await encontrarTodasViagens();
 
             expect(Viagem.find).toHaveBeenCalled();
+            expect(result).toEqual(viagens);
+        });
+    });
+
+    describe('encontrarViagensPorUsuarioId', () => {
+        it('deve encontrar viagens por ID de usuário', async () => {
+            const usuarioId = '456';
+            const viagens = [
+                { name: 'Viagem 1', usuarios: [{ id: usuarioId }] },
+                { name: 'Viagem 2', usuarios: [{ id: usuarioId }] }
+            ];
+            Viagem.find.mockResolvedValue(viagens);
+
+            const result = await encontrarViagensPorUsuarioId(usuarioId);
+
+            expect(Viagem.find).toHaveBeenCalledWith({ 'usuarios.id': usuarioId });
             expect(result).toEqual(viagens);
         });
     });

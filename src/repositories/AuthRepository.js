@@ -18,8 +18,8 @@ const alterarSenha = async (id, usuarioData) => {
     return await Auth.findByIdAndUpdate(id, usuarioData, { new: true });
 };
 
-const logout = async (email, usuarioData) => {
-    return await Auth.findOneAndUpdate({ email }, usuarioData, { new: true });
+const logout = async (email) => {
+    return await Auth.findOneAndUpdate({ email }, { token: '' }, { new: true });
 };
 
 module.exports = {

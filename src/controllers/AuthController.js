@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const AuthService = require('./../services/AuthService');
-const { body, validationResult } = require('express-validator');
+const { body, header, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
 
 router.post('/cadastro', [
     body('email').isEmail().withMessage('Email inválido'),
@@ -31,8 +32,8 @@ router.post('/login', [
 
     try {
         const { email, senha } = req.body;
-        const token = await AuthService.login(email, senha);
-        res.status(200).json({ token, email });
+        const { token, userInfo } = await AuthService.login(email, senha);
+        res.status(200).json({ token, userInfo, email });
     } catch (erro) {
         res.status(500).json({ erro: 'Erro ao realizar login' });
     }
@@ -57,7 +58,7 @@ router.post('/alterar_senha', [
 });
 
 router.delete('/logout', [
-    body('email').isEmail().withMessage('Email inválido')
+    header('Authorization').isString().withMessage('Token inválido')
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -65,7 +66,9 @@ router.delete('/logout', [
     }
 
     try {
-        await AuthService.logout(req.body.email);
+        const token = req.header('Authorization').replace('Bearer ', '');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        await AuthService.logout(decoded.email);
         res.status(200).json({ message: 'Logout realizado com sucesso!' });
     } catch (erro) {
         res.status(500).json({ erro: 'Erro ao realizar logout' });
