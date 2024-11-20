@@ -8,7 +8,7 @@
   "host": "localhost:8081",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
     "/viagens/nova_viagem": {
@@ -210,28 +210,167 @@
           }
         }
       }
-      },
-      "/viagens/editar_viagem/{id}": {
-        "put": {
-          "tags": [
-            "Viagem"
-          ],
-          "summary": "Edita uma viagem pelo ID",
-          "description": "Edita uma viagem pelo ID",
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "ID da viagem",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "body",
-              "in": "body",
-              "description": "Dados da viagem para edição",
-              "required": true,
-              "schema": {
+    },
+    "/viagens/editar_viagem/{id}": {
+      "put": {
+        "tags": [
+          "Viagem"
+        ],
+        "summary": "Edita uma viagem pelo ID",
+        "description": "Edita uma viagem pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da viagem",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados da viagem para edição",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "local_partida": {
+                  "type": "string"
+                },
+                "destino": {
+                  "type": "string"
+                },
+                "usuarios": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pagamento": {
+                  "type": "string"
+                },
+                "avaliacao": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Viagem atualizada com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Viagem não encontrada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao atualizar viagem",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/viagens/deletar_viagem/{id}": {
+      "delete": {
+        "tags": [
+          "Viagem"
+        ],
+        "summary": "Deleta uma viagem pelo ID",
+        "description": "Deleta uma viagem pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da viagem",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Viagem deletada com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Viagem não encontrada",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao deletar viagem",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/viagens/usuario/{id}/viagens": {
+      "get": {
+        "tags": [
+          "Viagem"
+        ],
+        "summary": "Lista todas as viagens de um usuário pelo ID",
+        "description": "Lista todas as viagens de um usuário pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de viagens do usuário",
+            "schema": {
+              "type": "array",
+              "items": {
                 "type": "object",
                 "properties": {
                   "status": {
@@ -243,105 +382,69 @@
                   "destino": {
                     "type": "string"
                   },
+                  "data": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
                   "usuarios": {
                     "type": "array",
                     "items": {
-                      "type": "string"
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "nome": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "tipo_usuario": {
+                          "type": "string"
+                        }
+                      }
                     }
                   },
                   "pagamento": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "metodo": {
+                          "type": "string"
+                        },
+                        "valor": {
+                          "type": "number"
+                        }
+                      }
+                    }
                   },
                   "avaliacao": {
-                    "type": "number"
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "nota": {
+                          "type": "number"
+                        },
+                        "feedback": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Viagem atualizada com sucesso",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "404": {
-              "description": "Viagem não encontrada",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "erro": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "500": {
-              "description": "Erro ao atualizar viagem",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "erro": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/viagens/deletar_viagem/:id": {
-        "delete": {
-          "tags": [
-            "Viagem"
-          ],
-          "summary": "Deleta uma viagem pelo ID",
-          "description": "Deleta uma viagem pelo ID",
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "ID da viagem",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Viagem deletada com sucesso",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "404": {
-              "description": "Viagem não encontrada",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "erro": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "500": {
-              "description": "Erro ao deletar viagem",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "erro": {
-                    "type": "string"
+          },
+          "500": {
+            "description": "Erro ao listar viagens do usuário",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "erro": {
+                  "type": "string"
                 }
               }
             }

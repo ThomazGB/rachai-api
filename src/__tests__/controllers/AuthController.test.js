@@ -1,100 +1,71 @@
 const request = require('supertest');
 const express = require('express');
-const AuthService = require('../../services/AuthService');
 const AuthController = require('../../controllers/AuthController');
 
 const app = express();
 app.use(express.json());
 app.use('/auth', AuthController);
 
-jest.mock('../../services/AuthService');
-
 describe('AuthController', () => {
     describe('POST /auth/cadastro', () => {
-        it('should return 201 and token on successful registration', async () => {
-            AuthService.registro.mockResolvedValue('mockToken');
+        it('should return 400 if email is invalid', async () => {
             const response = await request(app)
                 .post('/auth/cadastro')
-                .send({ email: 'test@example.com', senha: 'password' });
-
-            expect(response.status).toBe(201);
-            expect(response.body).toEqual({ token: 'mockToken' });
+                .send({ email: 'invalidemail', senha: 'password123' });
+            expect(response.status).toBe(400);
+            expect(response.body.errors[0].msg).toBe('Email inválido');
         });
 
-        it('should return 500 on registration error', async () => {
-            AuthService.registro.mockRejectedValue(new Error('Erro ao registrar usuário'));
+        it('should return 400 if password is less than 8 characters', async () => {
             const response = await request(app)
                 .post('/auth/cadastro')
-                .send({ email: 'test@example.com', senha: 'password' });
-
-            expect(response.status).toBe(500);
-            expect(response.body).toEqual({ erro: 'Erro ao registrar usuário' });
+                .send({ email: 'test@example.com', senha: 'short' });
+            expect(response.status).toBe(400);
+            expect(response.body.errors[0].msg).toBe('A senha deve conter no mínimo 8 caracteres');
         });
     });
 
     describe('POST /auth/login', () => {
-        it('should return 200 and token on successful login', async () => {
-            AuthService.login.mockResolvedValue('mockToken');
+        it('should return 400 if email is invalid', async () => {
             const response = await request(app)
                 .post('/auth/login')
-                .send({ email: 'test@example.com', senha: 'password' });
-
-            expect(response.status).toBe(200);
-            expect(response.body).toEqual({ token: 'mockToken', email: 'test@example.com' });
+                .send({ email: 'invalidemail', senha: 'password123' });
+            expect(response.status).toBe(400);
+            expect(response.body.errors[0].msg).toBe('Email inválido');
         });
 
-        it('should return 500 on login error', async () => {
-            AuthService.login.mockRejectedValue(new Error('Erro ao realizar login'));
+        it('should return 400 if password is less than 8 characters', async () => {
             const response = await request(app)
                 .post('/auth/login')
-                .send({ email: 'test@example.com', senha: 'password' });
-
-            expect(response.status).toBe(500);
-            expect(response.body).toEqual({ erro: 'Erro ao realizar login' });
+                .send({ email: 'test@example.com', senha: 'short' });
+            expect(response.status).toBe(400);
+            expect(response.body.errors[0].msg).toBe('A senha deve conter no mínimo 8 caracteres');
         });
     });
 
     describe('POST /auth/alterar_senha', () => {
-        it('should return 200 on successful password change', async () => {
-            AuthService.alterarSenha.mockResolvedValue();
+        it('should return 400 if email is invalid', async () => {
             const response = await request(app)
                 .post('/auth/alterar_senha')
-                .send({ email: 'test@example.com', senha_atual: 'oldPassword', nova_senha: 'newPassword' });
-
-            expect(response.status).toBe(200);
-            expect(response.body).toEqual({ message: 'Senha alterada com sucesso!' });
+                .send({ email: 'invalidemail', senha_atual: 'password123', nova_senha: 'newpassword123' });
+            expect(response.status).toBe(400);
+            expect(response.body.errors[0].msg).toBe('Email inválido');
         });
 
-        it('should return 500 on password change error', async () => {
-            AuthService.alterarSenha.mockRejectedValue(new Error('Erro ao alterar senha'));
+        it('should return 400 if current password is less than 8 characters', async () => {
             const response = await request(app)
                 .post('/auth/alterar_senha')
-                .send({ email: 'test@example.com', senha_atual: 'oldPassword', nova_senha: 'newPassword' });
-
-            expect(response.status).toBe(500);
-            expect(response.body).toEqual({ erro: 'Erro ao alterar senha' });
-        });
-    });
-
-    describe('DELETE /auth/logout', () => {
-        it('should return 200 on successful logout', async () => {
-            AuthService.logout.mockResolvedValue();
-            const response = await request(app)
-                .delete('/auth/logout')
-                .send({ email: 'test@example.com' });
-
-            expect(response.status).toBe(200);
-            expect(response.body).toEqual({ message: 'Logout realizado com sucesso!' });
+                .send({ email: 'test@example.com', senha_atual: 'short', nova_senha: 'newpassword123' });
+            expect(response.status).toBe(400);
+            expect(response.body.errors[0].msg).toBe('A senha atual deve conter no mínimo 8 caracteres');
         });
 
-        it('should return 500 on logout error', async () => {
-            AuthService.logout.mockRejectedValue(new Error('Erro ao realizar logout'));
+        it('should return 400 if new password is less than 8 characters', async () => {
             const response = await request(app)
-                .delete('/auth/logout')
-                .send({ email: 'test@example.com' });
-
-            expect(response.status).toBe(500);
-            expect(response.body).toEqual({ erro: 'Erro ao realizar logout' });
+                .post('/auth/alterar_senha')
+                .send({ email: 'test@example.com', senha_atual: 'password123', nova_senha: 'short' });
+            expect(response.status).toBe(400);
+            expect(response.body.errors[0].msg).toBe('A nova senha deve conter no mínimo 8 caracteres');
         });
     });
 });

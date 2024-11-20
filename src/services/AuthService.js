@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const JWT = process.env.JWT_SECRET_KEY;
 
 const AuthRepository = require('./../repositories/AuthRepository');
+const UsuarioService = require('./UsuarioService');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -45,7 +46,11 @@ async function login(email, senha) {
     }
     const token = jwt.sign({ email }, JWT, { expiresIn: '1d' });
     await AuthRepository.login(auth._id, { token });
-    return token;
+
+    // Obter as informações do usuário diretamente do UsuarioService
+    const userInfo = await UsuarioService.encontrarUsuarioPorEmail(email);
+
+    return { token, userInfo };
 }
 
 async function alterarSenha(email, senha_atual, nova_senha) {
@@ -68,7 +73,7 @@ async function alterarSenha(email, senha_atual, nova_senha) {
 }
 
 async function logout(email) {
-    await AuthRepository.logout(email, { token: '' });
+    await AuthRepository.logout(email);
 }
 
 module.exports = { registro, login, alterarSenha, logout };

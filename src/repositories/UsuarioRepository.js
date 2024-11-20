@@ -2,7 +2,7 @@ const Usuario = require('../models/schemas').Usuario;
 
 const criarUsuario = async (usuarioData) => {
     const usuario = new Usuario(usuarioData);
-    await usuario.create();
+    await usuario.save();
     return usuario;
 };
 

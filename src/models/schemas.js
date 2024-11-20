@@ -36,7 +36,7 @@ const UsuarioSchema = new Schema({
     },
     curso: {
         type: String,
-        enum: ['GE', 'GPI', 'CD', 'DSM'],
+        enum: ['GE', 'GPI', 'CD', 'DSM', 'CE', 'DP'],
         required: true
     },
     score: {
@@ -83,6 +83,10 @@ const ViagemSchema = new Schema({
         required: true
     },
     usuarios: [{
+        id: {
+            type: String,
+            required: true
+        },
         nome: {
             type: String,
             required: true

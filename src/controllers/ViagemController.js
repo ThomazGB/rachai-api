@@ -34,6 +34,15 @@ router.get('/viagem/:id', async (req, res) => {
     }
 });
 
+router.get('/usuario/:id/viagens', async (req, res) => {
+    try {
+        const viagens = await ViagemService.encontrarViagensPorUsuarioId(req.params.id);
+        res.status(200).json(viagens);
+    } catch (erro) {
+        res.status(500).json({ erro: erro.message });
+    }
+});
+
 router.put('/editar_viagem/:id', async (req, res) => {
     try {
         const { status, local_partida, destino, usuarios, pagamento, avaliacao } = req.body;

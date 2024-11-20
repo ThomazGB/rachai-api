@@ -22,10 +22,15 @@ const encontrarTodasViagens = async () => {
     return await Viagem.find();
 };
 
+const encontrarViagensPorUsuarioId = async (usuarioId) => {
+    return await Viagem.find({ 'usuarios.id': usuarioId });
+};
+
 module.exports = {
     criarViagem,
     encontrarViagemPorId,
     atualizarViagemPorId,
     deletarViagemPorId,
-    encontrarTodasViagens
+    encontrarTodasViagens,
+    encontrarViagensPorUsuarioId
 };
