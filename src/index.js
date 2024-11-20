@@ -14,8 +14,8 @@ app.use(bodyParser.json());
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://rachai-frontend-github.vercel.app',
-    'https://rachai-frontend-gitlab.vercel.app',
+    'https://rachai-github.vercel.app',
+    'https://rachai-gitlab.vercel.app',
     'https://rachai-backend-github.onrender.com:10000',
     'https://rachai-backend-gitlab.onrender.com:10000',
   ],
