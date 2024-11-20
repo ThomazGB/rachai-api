@@ -21,6 +21,7 @@
 <img src="https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white" alt="Eslint">
 <img src="https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white" alt="Jest">
 <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB">
+<img src="https://sonarcloud.io/api/project_badges/measure?project=Rachai-Fatec_backend&metric=alert_status" alt="SonarCloud Quality Gate">
 </p>
 <br>
 
