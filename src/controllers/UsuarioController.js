@@ -41,6 +41,18 @@ router.get('/usuario/motoristas', async (req, res) => {
     }
 });
 
+router.get('/usuario/passageiros', async (req, res) => {
+    try {
+        const passageiros = await UsuarioService.encontrarPassageiros();
+        if (passageiros.length === 0) {
+            return res.status(404).json({ erro: 'Infelizmente não encontramos nenhum passageiro na sua área!' });
+        }
+        res.status(200).json(passageiros);
+    } catch (erro) {
+        res.status(500).json({ erro: erro.message });
+    }
+});
+
 router.get('/usuario/:id', async (req, res) => {
     try {
         const usuario = await UsuarioService.encontrarUsuarioPorId(req.params.id);

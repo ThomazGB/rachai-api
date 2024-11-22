@@ -216,6 +216,43 @@
         }
       }
     },
+    "/usuarios/usuario/passageiros": {
+      "get": {
+        "tags": [
+          "Usuario"
+        ],
+        "summary": "Obtém uma lista de passageiros",
+        "description": "Retorna uma lista de usuários que são passageiros",
+        "responses": {
+          "200": {
+            "description": "Lista de passageiros",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "tipo_usuario": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Infelizmente não encontramos nenhum passageiro na sua área!"
+          },
+          "500": {
+            "description": "Erro ao buscar passageiros"
+          }
+        }
+      }
+    },
     "/usuarios/usuario/{id}": {
       "get": {
         "tags": [
