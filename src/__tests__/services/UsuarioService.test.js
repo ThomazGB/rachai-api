@@ -96,6 +96,18 @@ describe('UsuarioService', () => {
         });
     });
 
+    describe('encontrarPassageiros', () => {
+        it('should find all passengers', async () => {
+            const passengers = [{ id: '123', name: 'John Doe' }];
+            UsuarioRepository.encontrarPassageiros.mockResolvedValue(passengers);
+
+            const result = await UsuarioService.encontrarPassageiros();
+
+            expect(UsuarioRepository.encontrarPassageiros).toHaveBeenCalled();
+            expect(result).toEqual(passengers);
+        });
+    });
+
     describe('encontrarTodosUsuarios', () => {
         it('should find all users', async () => {
             const users = [{ id: '123', name: 'John Doe' }];

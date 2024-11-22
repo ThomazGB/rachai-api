@@ -65,6 +65,10 @@ const encontrarMotoristas = async () => {
     return await UsuarioRepository.encontrarMotoristas();
 };
 
+const encontrarPassageiros = async () => {
+    return await UsuarioRepository.encontrarPassageiros();
+};
+
 const encontrarTodosUsuarios = async () => {
     return await UsuarioRepository.encontrarTodosUsuarios();
 };
@@ -103,6 +107,7 @@ module.exports = {
     atualizarUsuarioPorId,
     deletarUsuarioPorId,
     encontrarMotoristas,
+    encontrarPassageiros,
     encontrarTodosUsuarios,
     uploadImagem
 };

@@ -111,6 +111,36 @@ describe('UsuarioController', () => {
         });
     });
 
+    describe('GET /api/usuario/passageiros', () => {
+        it('should return all passengers and return 200', async () => {
+            const mockPassengers = [{ id: 1, name: 'Test Passanger' }];
+            UsuarioService.encontrarPassageiros.mockResolvedValue(mockPassengers);
+
+            const response = await request(app).get('/api/usuario/passageiros');
+
+            expect(response.status).toBe(200);
+            expect(response.body).toEqual(mockPassengers);
+        });
+
+        it('should return 404 if no passengers are found', async () => {
+            UsuarioService.encontrarPassageiros.mockResolvedValue([]);
+
+            const response = await request(app).get('/api/usuario/passageiros');
+
+            expect(response.status).toBe(404);
+            expect(response.body).toEqual({ erro: 'Infelizmente não encontramos nenhum passageiro na sua área!' });
+        });
+
+        it('should return 500 if there is an error', async () => {
+            UsuarioService.encontrarPassageiros.mockRejectedValue(new Error('Erro ao buscar passageiros'));
+
+            const response = await request(app).get('/api/usuario/passageiros');
+
+            expect(response.status).toBe(500);
+            expect(response.body).toEqual({ erro: 'Erro ao buscar passageiros' });
+        });
+    });
+
     describe('GET /api/usuario/:id', () => {
         it('should return a user by id and return 200', async () => {
             const mockUser = { id: 1, name: 'Test User' };

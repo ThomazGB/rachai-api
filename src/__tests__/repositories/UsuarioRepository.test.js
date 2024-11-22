@@ -7,6 +7,7 @@ const {
     atualizarUsuarioPorId,
     deletarUsuarioPorId,
     encontrarMotoristas,
+    encontrarPassageiros,
     encontrarTodosUsuarios
 } = require('../../repositories/UsuarioRepository');
 
@@ -106,6 +107,16 @@ describe('UsuarioRepository', () => {
 
         expect(Usuario.find).toHaveBeenCalledWith({ tipo_usuario: 'MOTORISTA' });
         expect(resultado).toEqual(motoristas);
+    });
+
+    it('deve encontrar todos os passageiros', async () => {
+        const passageiros = [{ nome: 'Passageiro 1' }, { nome: 'Passageiro 2' }];
+        Usuario.find.mockResolvedValue(passageiros);
+
+        const resultado = await encontrarPassageiros();
+
+        expect(Usuario.find).toHaveBeenCalledWith({ tipo_usuario: 'PASSAGEIRO' });
+        expect(resultado).toEqual(passageiros);
     });
 
     it('deve encontrar todos os usuários', async () => {
