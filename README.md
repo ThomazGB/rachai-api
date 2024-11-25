@@ -53,7 +53,8 @@ Este projeto foi desenvolvido para o Projeto Integrador, por discentes do curso 
     * Multer;
     * JWT (JSON Web Token);
     * Bcript;
-    * Swagger
+    * Swagger;
+    * Jest
 
 ### Banco de Dados:
 * Mongo DB;
