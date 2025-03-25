@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <h1 align="center">
   <br>
@@ -93,3 +94,6 @@ Este projeto é distribuído sob a licença MIT.
 ---
 
 
+=======
+
+>>>>>>
