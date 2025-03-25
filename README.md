@@ -95,5 +95,6 @@ Este projeto é distribuído sob a licença MIT.
 
 
 =======
-
->>>>>>
+# rachai-api
+API Rachaí
+>>>>>>> 78ca6860e9a93bea8767d97ea7442489c5631ba2
